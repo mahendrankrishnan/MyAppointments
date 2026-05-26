@@ -1,0 +1,15 @@
+<div class="container">
+  <header class="card" style="margin-bottom: 30px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h1 style="color: #667eea; margin: 0;">📅 Appointment Management</h1>
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <div *ngIf="authService.isAuthenticated()" style="display: flex; align-items: center; gap: 10px;">
+          <span style="color: #666;">Welcome, {{ authService.currentUser()?.username || authService.currentUser()?.email }}</span>
+          <button class="btn btn-secondary" (click)="logout()">Logout</button>
+        </div>
+        <a *ngIf="!authService.isAuthenticated()" routerLink="/login" class="btn btn-primary">Login</a>
+      </div>
+    </div>
+  </header>
+  <router-outlet></router-outlet>
+</div>

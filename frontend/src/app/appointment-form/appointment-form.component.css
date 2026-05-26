@@ -1,0 +1,122 @@
+.error {
+  border-color: #dc3545 !important;
+}
+
+.datetime-container {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.date-time-input {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.date-time-input input[type="date"],
+.date-time-input input[type="time"] {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+}
+
+.date-time-input input[type="date"]:focus,
+.date-time-input input[type="time"]:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.date-time-input input[type="date"]:hover,
+.date-time-input input[type="time"]:hover {
+  border-color: #667eea;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.predefined-toggle {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #667eea;
+}
+
+.toggle-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #667eea;
+}
+
+.predefined-section {
+  background: #f0f4ff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 2px solid #667eea;
+}
+
+.custom-section {
+  margin-top: 20px;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+  background: white;
+  cursor: pointer;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.form-group select:hover {
+  border-color: #667eea;
+}
+
+.form-group select.error {
+  border-color: #dc3545 !important;
+}
+
+@media (max-width: 600px) {
+  .datetime-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .date-time-input {
+    width: 100%;
+  }
+}
+

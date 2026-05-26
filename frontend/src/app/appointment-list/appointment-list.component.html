@@ -1,0 +1,60 @@
+<div class="card">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2>Appointments</h2>
+    <button class="btn btn-primary" routerLink="/new">+ New Appointment</button>
+  </div>
+
+  <div class="filter-section">
+    <label class="filter-toggle">
+      <input 
+        type="checkbox" 
+        [checked]="showPastAppointments()" 
+        (change)="togglePastAppointments()"
+      />
+      <span>Show Past Appointments</span>
+    </label>
+    <span class="appointment-count">
+      Showing {{ filteredAppointments().length }} of {{ appointments().length }} appointment(s)
+    </span>
+  </div>
+
+  <div *ngIf="loading()" style="text-align: center; padding: 40px;">
+    <p>Loading appointments...</p>
+  </div>
+
+  <div *ngIf="!loading() && filteredAppointments().length === 0" class="empty-state">
+    <h3 *ngIf="appointments().length === 0">No appointments found</h3>
+    <p *ngIf="appointments().length === 0">Create your first appointment to get started!</p>
+    <h3 *ngIf="appointments().length > 0 && !showPastAppointments()">No future appointments</h3>
+    <p *ngIf="appointments().length > 0 && !showPastAppointments()">All appointments are in the past. Enable "Show Past Appointments" to view them.</p>
+  </div>
+
+  <table *ngIf="!loading() && filteredAppointments().length > 0" class="table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Date & Time</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let appointment of filteredAppointments()" [class.past-appointment]="isPastAppointment(appointment)">
+        <td>{{ appointment.title }}</td>
+        <td>{{ appointment.description || '-' }}</td>
+        <td>{{ formatDate(appointment.appointmentDate) }}</td>
+        <td>
+          <div class="actions">
+            <button class="btn btn-secondary" (click)="editAppointment(appointment.id)">
+              Edit
+            </button>
+            <button class="btn btn-danger" (click)="deleteAppointment(appointment.id)">
+              Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+

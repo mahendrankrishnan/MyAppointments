@@ -1,0 +1,158 @@
+<div class="card">
+  <h2>{{ isEditMode() ? 'Edit Appointment' : 'New Appointment' }}</h2>
+  
+  <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <div class="predefined-toggle">
+        <label class="toggle-label">
+          <input 
+            type="checkbox" 
+            [checked]="usePredefined()" 
+            (change)="togglePredefined()"
+          />
+          <span>Use Predefined Appointment Type</span>
+        </label>
+      </div>
+    </div>
+
+    <div *ngIf="usePredefined()" class="predefined-section">
+      <div class="form-group">
+        <label for="predefinedType">Appointment Type *</label>
+        <select
+          id="predefinedType"
+          formControlName="predefinedType"
+          (change)="onPredefinedTypeChange($any($event.target).value)"
+          [class.error]="appointmentForm.get('predefinedType')?.invalid && appointmentForm.get('predefinedType')?.touched"
+        >
+          <option value="">Select a type...</option>
+          <option *ngFor="let type of predefinedTypes" [value]="type.id">
+            {{ type.name }}
+          </option>
+        </select>
+        <div *ngIf="appointmentForm.get('predefinedType')?.invalid && appointmentForm.get('predefinedType')?.touched" 
+             class="error-message">
+          Please select an appointment type
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Date of Change *</label>
+        <input
+          type="date"
+          formControlName="dateOfChange"
+          [class.error]="appointmentForm.get('dateOfChange')?.invalid && appointmentForm.get('dateOfChange')?.touched"
+        />
+        <div *ngIf="appointmentForm.get('dateOfChange')?.invalid && appointmentForm.get('dateOfChange')?.touched" 
+             class="error-message">
+          Date of change is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Future Date for Change *</label>
+        <div class="datetime-container">
+          <div class="date-time-input">
+            <label for="futureChangeDate" class="input-label">Date</label>
+            <input
+              id="futureChangeDate"
+              type="date"
+              formControlName="futureChangeDate"
+              [class.error]="appointmentForm.get('futureChangeDate')?.invalid && appointmentForm.get('futureChangeDate')?.touched"
+            />
+          </div>
+          <div class="date-time-input">
+            <label for="futureChangeTime" class="input-label">Time</label>
+            <input
+              id="futureChangeTime"
+              type="time"
+              formControlName="futureChangeTime"
+              [class.error]="appointmentForm.get('futureChangeTime')?.invalid && appointmentForm.get('futureChangeTime')?.touched"
+            />
+          </div>
+        </div>
+        <div *ngIf="(appointmentForm.get('futureChangeDate')?.invalid || appointmentForm.get('futureChangeTime')?.invalid) && (appointmentForm.get('futureChangeDate')?.touched || appointmentForm.get('futureChangeTime')?.touched)" 
+             class="error-message">
+          Future date and time are required
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!usePredefined()" class="custom-section">
+      <div class="form-group">
+        <label for="title">Title *</label>
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        placeholder="Enter appointment title"
+        [class.error]="appointmentForm.get('title')?.invalid && appointmentForm.get('title')?.touched"
+      />
+      <div *ngIf="appointmentForm.get('title')?.invalid && appointmentForm.get('title')?.touched" 
+           style="color: #dc3545; font-size: 12px; margin-top: 4px;">
+        Title is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        placeholder="Enter appointment description (optional)"
+      ></textarea>
+
+      <div style="display: flex; align-items: center; gap: 12px; margin-top: 10px; flex-wrap: wrap;">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="generateDescription()"
+          [disabled]="aiGenerating()"
+        >
+          {{ aiGenerating() ? 'Generating...' : 'Generate with AI' }}
+        </button>
+        <div *ngIf="aiError()" class="error-message" style="margin-top: 0;">
+          {{ aiError() }}
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Date & Time *</label>
+      <div class="datetime-container">
+        <div class="date-time-input">
+          <label for="appointmentDate" class="input-label">Date</label>
+          <input
+            id="appointmentDate"
+            type="date"
+            formControlName="appointmentDate"
+            [class.error]="appointmentForm.get('appointmentDate')?.invalid && appointmentForm.get('appointmentDate')?.touched"
+          />
+        </div>
+        <div class="date-time-input">
+          <label for="appointmentTime" class="input-label">Time</label>
+          <input
+            id="appointmentTime"
+            type="time"
+            formControlName="appointmentTime"
+            [class.error]="appointmentForm.get('appointmentTime')?.invalid && appointmentForm.get('appointmentTime')?.touched"
+          />
+        </div>
+      </div>
+      <div *ngIf="(appointmentForm.get('appointmentDate')?.invalid || appointmentForm.get('appointmentTime')?.invalid) && (appointmentForm.get('appointmentDate')?.touched || appointmentForm.get('appointmentTime')?.touched)" 
+           class="error-message">
+        Date and time are required
+      </div>
+    </div>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-top: 20px;">
+      <button type="submit" class="btn btn-primary" [disabled]="appointmentForm.invalid || submitting()">
+          {{ submitting() ? 'Saving...' : (isEditMode() ? 'Update' : 'Create') }}
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
+
