@@ -1,0 +1,41 @@
+.session-timeout-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.session-timeout-dialog {
+  width: 100%;
+  max-width: 440px;
+  margin: 0;
+  text-align: center;
+}
+
+.session-timeout-dialog h2 {
+  color: #667eea;
+  margin-bottom: 12px;
+}
+
+.session-timeout-dialog p {
+  color: #444;
+  line-height: 1.5;
+}
+
+.session-timeout-subtext {
+  color: #666;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.session-timeout-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}

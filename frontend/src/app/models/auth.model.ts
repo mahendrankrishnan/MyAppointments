@@ -13,6 +13,28 @@ export interface LoginResponse {
     email: string;
     phone: string;
   };
-  applications: any[];
+  applications: ApplicationRole[];
 }
+
+export interface Role {
+  id: number;
+  roleName: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApplicationRole {
+  id: number;
+  appName: string;
+  createdAt: string;
+  updatedAt: string;
+  roles: Role[];
+}
+
+export interface UserApplicationsRolesResponse {
+  userId: number;
+  applications: ApplicationRole[];
+}
+
+export const REQUIRED_APP_NAME = 'MyAppt';
 

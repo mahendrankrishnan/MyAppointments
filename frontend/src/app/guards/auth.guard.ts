@@ -1,23 +1,32 @@
 import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
+import { map } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  // Check authentication status - verify both signal and token existence
   const token = authService.getToken();
   const isAuthSignal = authService.isAuthenticated();
-  
-  // Ensure we have both a token and the signal indicates authentication
+
   const isAuthenticated = token !== null && token !== '' && isAuthSignal;
-  
-  if (isAuthenticated) {
-    return true;
+
+  if (!isAuthenticated) {
+    router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+    return false;
   }
 
-  // Redirect to login page if not authenticated
-  router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-  return false;
+  return authService.validateSession().pipe(
+    map((valid) => {
+      if (!valid) {
+        router.navigate(['/login'], {
+          queryParams: { returnUrl: state.url, reason: 'access_denied' },
+        });
+        return false;
+      }
+
+      return true;
+    })
+  );
 };
