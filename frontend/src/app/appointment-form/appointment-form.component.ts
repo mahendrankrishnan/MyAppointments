@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppointmentService, GenerateDescriptionRequest } from '../services/appointment.service';
+import { GoogleCalendarService } from '../services/google-calendar.service';
 import { PREDEFINED_APPOINTMENT_TYPES, PredefinedAppointmentType } from '../models/predefined-appointment.model';
 
 @Component({
@@ -26,6 +27,7 @@ export class AppointmentFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private appointmentService: AppointmentService,
+    private googleCalendarService: GoogleCalendarService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -37,7 +39,8 @@ export class AppointmentFormComponent implements OnInit {
       predefinedType: [''],
       dateOfChange: [''],
       futureChangeDate: [''],
-      futureChangeTime: ['']
+      futureChangeTime: [''],
+      addToGoogleCalendar: [true],
     });
   }
 
@@ -128,8 +131,7 @@ export class AppointmentFormComponent implements OnInit {
       } else {
         this.appointmentService.createAppointment(appointmentData).subscribe({
           next: () => {
-            this.submitting.set(false);
-            this.router.navigate(['/']);
+            this.handleCreateSuccess(appointmentData);
           },
           error: (error: any) => {
             console.error('Error creating appointment:', error);
@@ -139,6 +141,24 @@ export class AppointmentFormComponent implements OnInit {
         });
       }
     }
+  }
+
+  private handleCreateSuccess(appointmentData: {
+    title: string;
+    description?: string;
+    appointmentDate: string;
+  }): void {
+    this.submitting.set(false);
+
+    if (this.appointmentForm.get('addToGoogleCalendar')?.value) {
+      this.googleCalendarService.openAddEventUrl({
+        title: appointmentData.title,
+        description: appointmentData.description,
+        startDate: new Date(appointmentData.appointmentDate),
+      });
+    }
+
+    this.router.navigate(['/']);
   }
 
   generateDescription() {

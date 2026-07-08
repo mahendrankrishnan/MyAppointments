@@ -145,6 +145,13 @@
     </div>
     </div>
 
+    <div *ngIf="!isEditMode()" class="form-group google-calendar-toggle">
+      <label class="toggle-label">
+        <input type="checkbox" formControlName="addToGoogleCalendar" />
+        <span>Add to Google Calendar after creating</span>
+      </label>
+    </div>
+
     <div style="display: flex; gap: 10px; margin-top: 20px;">
       <button type="submit" class="btn btn-primary" [disabled]="appointmentForm.invalid || submitting()">
           {{ submitting() ? 'Saving...' : (isEditMode() ? 'Update' : 'Create') }}
